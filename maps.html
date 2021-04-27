@@ -15,10 +15,10 @@
 <script>
     // write your d3 code here.. 
     // The svg
-var svg1 = d3.select("#pre-pandemic"),
-    svg2 = d3.select("#pandemic"),
-  width = +svg.attr("width"),
-  height = +svg.attr("height");
+var svg1 = d3.select("svg#pre-pandemic"),
+    svg2 = d3.select("svg#pandemic"),
+  width = +svg1.attr("width"),
+  height = +svg1.attr("height");
 
 // Map and projection
 var path = d3.geoPath();
