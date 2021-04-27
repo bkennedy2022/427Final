@@ -10,8 +10,49 @@
 </head>
 <body>
 
-<svg id="pre-pandemic"></svg>
-<svg id="pandemic"></svg>
+    <!-- Tab links -->
+    <!-- source: https://www.w3schools.com/howto/howto_js_tabs.asp -->
+<div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'Economy')">Economy</button>
+    <button class="tablinks" onclick="openTab(event, 'Family')">Family</button>
+    <button class="tablinks" onclick="openTab(event, 'Health')">Health</button>
+    <button class="tablinks" onclick="openTab(event, 'Freedom')">Freedom</button>
+    <button class="tablinks" onclick="openTab(event, 'Generosity')">Generosity</button>
+    <button class="tablinks" onclick="openTab(event, 'Corruption')">Corruption</button>
+
+  </div>
+  
+  <!-- Tab content -->
+  <!-- <div id="London" class="tabcontent">
+    <h3>London</h3>
+    <p>London is the capital city of England.</p>
+  </div>
+  
+  <div id="Paris" class="tabcontent">
+    <h3>Paris</h3>
+    <p>Paris is the capital of France.</p>
+  </div>
+  
+  <div id="Tokyo" class="tabcontent">
+    <h3>Tokyo</h3>
+    <p>Tokyo is the capital of Japan.</p>
+  </div> -->
+
+
+<div class = "tabcontent" id = "Economy">
+    <div class = "map-div">
+        <h1 class = "map-title">Pre-Pandemic</h1>
+        <div class = "svg-div">
+            <svg id="pre-pandemic"></svg>
+        </div>
+    </div>
+    <div class = "map-div"> 
+        <h1 class = "map-title">Post-Pandemic</h1>
+        <div class = "svg-div">
+            <svg id="pandemic"></svg>
+        </div>
+    </div>
+</div>
 
 <script>
     // write your d3 code here.. 
@@ -109,6 +150,28 @@ function ready(error, topo) {
       .on("mouseover", mouseOver )
       .on("mouseleave", mouseLeave )
     }
+
+
+    function openTab(evt, tabName) {
+  // Declare all variables
+  var i, tabcontent, tablinks;
+
+  // Get all elements with class="tabcontent" and hide them
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  // Get all elements with class="tablinks" and remove the class "active"
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+
+  // Show the current tab, and add an "active" class to the button that opened the tab
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
 
 </script>
 </body>
