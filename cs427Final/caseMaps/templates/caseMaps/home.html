@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>Home</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'caseMaps/home.css' %}">
+</head>
+<body>
+    <!-- Load d3.js -->
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/queue.v1.min.js"></script>
+	<script src="https://d3js.org/topojson.v1.min.js"></script> 
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+    <div id="header">
+        <div id="branding">
+            <h1 id="site-name">
+                COVID Diagrams: Home
+            </h1>
+        </div>
+    </div>
+    <div id="subheader">
+        <h4 id="subheader h4">
+            <a href="{% url 'home' %}" class="header-tabs"> Home </a>
+            <a href="{% url 'chloropleth' %}" class="header-tabs"> Chloropleth </a>
+            <a href="{% url 'histograms' %}" class="header-tabs"> Histograms </a>
+            <a href="{% url 'regression' %}" class="header-tabs"> Regression </a>
+        </h4>
+    </div>
+
+</body>
