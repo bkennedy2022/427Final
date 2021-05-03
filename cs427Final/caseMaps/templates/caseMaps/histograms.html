@@ -36,7 +36,7 @@
       
         // set the dimensions and margins of the graph
       var margin = {
-        top: 20, right: 30, bottom: 40, left: 80},
+        top: 40, right: 30, bottom: 40, left: 80},
           width = 860 - margin.left - margin.right,
           height = 400 - margin.top - margin.bottom
 
@@ -48,6 +48,7 @@
         .append("svg")
           .style("position", "relative")
           .style("left", '50px')
+          .style("top", '50px')
           .attr("width", width + margin.left + margin.right)
           .attr("height", height + margin.top + margin.bottom)
           .style('background-color', 'white')
@@ -120,6 +121,16 @@
             this.setAttribute('fill-opacity','1.0')
             return tooltip.style("visibility", "hidden")
           })
+
+          svg.append("text")
+            .attr("x", (width / 2))             
+            .attr("y", 0)
+            .attr('fill', 'black')
+            .attr("text-anchor", "middle")  
+            .style("font-size", "21px") 
+            // .style("z-index", "5")
+            .style("text-decoration", "underline")  
+            .text("Total # Cases in US By {{ choice }}")
       })
       </script>
 </body>

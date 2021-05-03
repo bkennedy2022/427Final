@@ -36,7 +36,7 @@
         }
 
         // set the dimensions and margins of the graph
-        var margin = {top: 10, right: 30, bottom: 30, left: 60},
+        var margin = {top: 10, right: 30, bottom: 20, left: 60},
             width = 550 - margin.left - margin.right,
             height = 500 - margin.top - margin.bottom;
         
@@ -53,7 +53,7 @@
         var predict_svg = d3.select("#prediction")
           .append("svg")
             .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
+            .attr("height", height + margin.top + margin.bottom+50)
           .append("g")
             .attr("transform",
                   "translate(" + margin.left + "," + margin.bottom + ")");
@@ -75,7 +75,7 @@
             data = data.sort(sortdates)
             // Add X axis --> it is a date format
             var x = d3.scaleTime()
-              .domain(d3.extent(data, function(d) { return d.submission_date; }))
+              .domain(d3.extent(data, function(d) { return d.date; }))
               .range([ 0, width ]);
             svg.append("g")
               .attr("transform", "translate(0," + height + ")")
@@ -99,7 +99,7 @@
               .datum(data)
               .attr("fill", "none")
               .attr("stroke", "steelblue")
-              .attr("stroke-width", 1)
+              .attr("stroke-width", 2)
               .attr("d", d3.line()
                 .x(function(d) { return x(d.date) })
                 .y(function(d) { return y(d.cases) })
@@ -168,8 +168,8 @@
             predict_svg.append("path")
               .datum(data)
               .attr("fill", "none")
-              .attr("stroke", "steelblue")
-              .attr("stroke-width", 1)
+              .attr("stroke", "red")
+              .attr("stroke-width", 2)
               .attr("d", d3.line()
                 .x(function(d) { return x(d.date) })
                 .y(function(d) { return y(d.cases) })
