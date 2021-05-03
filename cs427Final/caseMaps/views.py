@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 
-import boto3
 import pandas as pd
 
 # Create your views here.

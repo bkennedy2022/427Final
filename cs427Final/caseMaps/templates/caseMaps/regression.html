@@ -10,20 +10,20 @@
     <script src="https://d3js.org/d3.v4.js"></script>
 
     <div id="header">
-        <div id="branding">
-            <h1 id="site-name">
-                COVID Case Predictions: Linear Regression Model
-            </h1>
-        </div>
-    </div>
-    <div id="subheader">
-        <h4 id="subheader h4">
-            <a href="{% url 'home' %}" class="header-tabs"> Home </a>
-            <a href="{% url 'histograms' %}" class="header-tabs"> Demographic Info </a>
-            <a href="{% url 'regression' %}" class="header-tabs"> Covid Case Regression Model </a>
-        </h4>
-    </div>
-
+      <div id="branding">
+          <h1 id="site-name">
+              COVID Case Predictions: Linear Regression Model
+          </h1>
+      </div>
+  </div>
+  <div id="subheader">
+      <h4 id="subheader h4">
+        <a href="{% url 'home' %}" class="header-tabs"> Home </a>
+        <a href="{% url 'histograms' %}" class="header-tabs"> Demographic Info </a>
+        <a href="{% url 'regression' %}" class="header-tabs"> Covid Case Regression Model </a>
+      </h4>
+  </div>
+  
     <div id="actual"></div>
     <div id="prediction"></div>
 
