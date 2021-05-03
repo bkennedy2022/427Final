@@ -9,6 +9,13 @@ body {
     background: antiquewhite;
 }
 
+svg text.label {
+    fill:white;
+    font: 15px;  
+    font-weight: 400;
+    text-anchor: right;
+  }
+
 /* header styling */
 #header {
     width: auto;
