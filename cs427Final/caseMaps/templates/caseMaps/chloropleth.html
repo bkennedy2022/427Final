@@ -30,8 +30,8 @@
 
     <script>
         //Width and height
-      var w = 800;
-      var h = 500;
+      var w = 800
+      var h = 500
 
       var margin = {
           top: 30,
@@ -40,6 +40,12 @@
           right: 40
         };
 
+      var domain = [] //[100, 10000, 20000, 30000, 50000, 100000, 2000000, 4000000, 8000000, 1000000, 5000000]
+      
+      for(var i = 0; i < 3700000; i += 1000)
+        domain.push(i)
+
+
         var width = w - margin.left - margin.right;
         var height = h - margin.top - margin.bottom;
 
@@ -47,11 +53,11 @@
       // define map projection
       var projection = d3.geoAlbersUsa()
         .translate([w/2, h/2])
-        .scale([800]);
+        .scale([800])
 
       //Define default path generator
       var path = d3.geoPath()
-        .projection(projection);
+        .projection(projection)
 
       var svg = d3.select("body")
         .append("svg")
@@ -59,26 +65,24 @@
         .attr("width", w)
         .attr("height", h)
         .append("g")
-        .attr("tranform", "translate(0" + margin.left + "," + margin.top + ")");
+        .attr("tranform", "translate(0" + margin.left + "," + margin.top + ")")
 
         var color = d3.scaleQuantile()
-         .domain([100, 10000, 20000, 30000, 50000, 100000, 2000000, 4000000, 8000000, 1000000, 5000000])
+         .domain(domain)
           .range(d3.schemeReds[7]);
 
           d3.csv("https://raw.githubusercontent.com/bkennedy2022/427Final/master/processed_data/cases_by_state.csv", function(data){
 
     d3.json("https://raw.githubusercontent.com/python-visualization/folium/master/examples/data/us-states.json", function(json){
-        for(var i = 0; i < data.length; i++){
-          var dataState = data[i].state;
-          var dataValue = parseFloat(data[i].value);
-          for(var n = 0; n < json.features.length; n++){
-            var jsonState = json.features[n].properties.name;
-            if(dataState == jsonState){
-              json.features[n].properties.value = dataValue;
-              break;
+       
+      data.forEach(function(value, index, array) {
+        for(var i = 0; i < json.features.length; i++){
+            if(value.state == json.features[i].properties.name){
+              json.features[i].properties.value = value.value
+              break
             }
           }
-        }
+      });
 
         svg.selectAll("path")
           .data(json.features)
@@ -86,41 +90,12 @@
           .append("path")
           .attr("d", path)
           .style("fill", function(d){
-            return color(d.properties.value);
+            return color(d.properties.value)
           });
 
-
-          var legend = svg.selectAll("g.legend")
-        .data([100, 10000, 20000, 30000, 50000, 100000, 2000000, 4000000, 8000000, 1000000, 5000000])
-        .enter().append("g")
-        .attr("class", "legend");
-        
-       var ls_w = 73, ls_h = 20;
-
-    //    legend.append("text")
-    //    .attr("x", function(d, i){ return width - (i*ls_w) - ls_w;})
-    //     .attr("y", 390)
-    //     .text(function(d, i){ return legend_labels[i]; })
-    //     .style("color", "black");
-        
-       legend.append("rect")
-        .attr("x", function(d, i){ return width - (i*ls_w) - ls_w;})
-        .attr("y", 450)
-        .attr("width", ls_w)
-        .attr("height", ls_h)
-        .style("fill", function(d, i) { return color(d); })
-        .style("opacity", 0.8);
-
-    //     var legend_title = "COVID-19 Cases";
-
-    //     svg.append("text")
-    //     .attr("x", 10)
-    //     .attr("y", 440)
-    //     .attr("class", "legend_title")
-    //     .text(function(){return legend_title});
       });
 
-})
+    })
     </script>
 
 </body>

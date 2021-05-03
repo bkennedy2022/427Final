@@ -14,7 +14,12 @@ def chloropleth(request):
     return render(request,'caseMaps/chloropleth.html')
 
 def histograms(request):
-    return render(request,'caseMaps/histograms.html')
+    context = {"choice": 'race'}
+
+    # form was submitted, change the graph
+    # if request.POST:
+
+    return render(request,'caseMaps/histograms.html', context)
 
 def regression(request):
     return render(request,'caseMaps/regression.html')
