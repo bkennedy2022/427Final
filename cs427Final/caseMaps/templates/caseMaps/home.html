@@ -149,6 +149,96 @@
                   })
           
                 })
+
+                // still based on tutorial https://bl.ocks.org/JulienAssouline/1ae3480c5277e2eecd34b71515783d6f
+          
+                d3.csv("https://raw.githubusercontent.com/bkennedy2022/427Final/master/processed_data/cases_by_state_population.csv", function(data){
+          
+                d3.json("https://raw.githubusercontent.com/python-visualization/folium/master/examples/data/us-states.json", function(json){
+                  
+                    var domain = [] //[100, 10000, 20000, 30000, 50000, 100000, 2000000, 4000000, 8000000, 1000000, 5000000]
+                
+                for(var i = 0; i < 15; i += 0.25)
+                  domain.push(i)
+          
+                // define map projection
+                var pop_projection = d3.geoAlbersUsa()
+                  .translate([w/2, h/2])
+                  .scale([800])
+          
+                //Define default path generator
+                var pop_path = d3.geoPath()
+                  .projection(pop_projection)
+          
+                var pop_svg = d3.select("body")
+                  .append("svg")
+                  .attr("id", "pop-chart")
+                  .style("position", "relative")
+                  .attr("width", w)
+                  .attr("height", h)
+                  .style("background-color", "white")
+                  .append("g")
+                  .attr("tranform", "translate(0" + margin.left + "," + margin.top + ")")
+          
+                  var color = d3.scaleQuantile()
+                   .domain(domain)
+                   .range(d3.schemeReds[7]);
+                
+                  data.forEach(function(value, index, array) {
+                    for(var i = 0; i < json.features.length; i++){
+                        if(value.state == json.features[i].properties.name){
+                          json.features[i].properties.value = Number(value.percentage)
+                          break
+                        }
+                      }
+                  })
+          
+                  var pop_tooltip = d3.select("body")
+                    .append("div")
+                    .style("position", "absolute")
+                    .style("z-index", "5")
+                    .style("visibility", "hidden")
+                    .style("background", "cornflowerblue")
+                    .style("padding", "5px")
+                    .style("border-radius", "2px")
+          
+                    pop_svg.selectAll("path")
+                      .data(json.features)
+                      .enter().append("path")
+                      .attr("d", pop_path)
+                      .style("fill", function(d){
+                        return color(d.properties.value)
+                      })
+                      .on("mouseover", function(d){
+                        // format cases with commas
+                        var cases = Number(d.properties.value)
+                        cases = cases.toLocaleString("en-US")
+
+                        // set tooltip text
+                        pop_tooltip.html(d.properties.name + "<br>" + cases + "%")
+                        return pop_tooltip.style("visibility", "visible")
+                      })
+                      .on("mousemove", function(){
+                        // move around tooltip
+                        return pop_tooltip.style("top", (d3.event.pageY+10)+"px").style("left",(d3.event.pageX+10)+"px")
+                      })
+                      .on("mouseout", function(){
+                        // remove tooltip
+                        return pop_tooltip.style("visibility", "hidden")
+                      })
+          
+                      pop_svg.append("text")
+                        .attr("x", (width / 2))             
+                        .attr("y", 0 + margin.top)
+                        .attr("fill", "black")
+                        .attr("text-anchor", "middle")  
+                        .style("font-size", "21px") 
+                        .style("text-decoration", "underline")  
+                        .text("Total % Cases in US By State")
+          
+                  })
+          
+                })
               </script>
         </div>
         <br>
