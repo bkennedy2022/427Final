@@ -37,8 +37,8 @@
 
         // set the dimensions and margins of the graph
         var margin = {top: 10, right: 30, bottom: 30, left: 60},
-            width = 500 - margin.left - margin.right,
-            height = 400 - margin.top - margin.bottom;
+            width = 550 - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom;
         
         // append the svg object to the body of the page
         var svg = d3.select("#actual")
@@ -49,14 +49,14 @@
             .attr("transform",
                   "translate(" + margin.left + "," + margin.top + ")");
 
-        // // append the svg object to the body of the page
-        // var predict_svg = d3.select("#prediction")
-        //   .append("svg")
-        //     .attr("width", width + margin.left + margin.right)
-        //     .attr("height", height + margin.top + margin.bottom)
-        //   .append("g")
-        //     .attr("transform",
-        //           "translate(" + margin.left + "," + height + margin.top + ")");
+        // append the svg object to the body of the page
+        var predict_svg = d3.select("#prediction")
+          .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+            .attr("transform",
+                  "translate(" + margin.left + "," + margin.bottom + ")");
         
         
         //Read the data
@@ -86,7 +86,7 @@
         
             // Add Y axis
             var y = d3.scaleLinear()
-              .domain([d3.min(data, function(d) {return +d.cases}), d3.max(data, function(d) {return +d.cases; })])
+              .domain([0, d3.max(data, function(d) {return +d.cases; })])
               .range([ height, 0 ])
             svg.append("g")
               .call(
@@ -127,6 +127,76 @@
                                   (height + margin.top + 20) + ")")
               .style("text-anchor", "middle")
               .text("Date");
+        
+        })
+
+        //Read the data
+        d3.csv("https://raw.githubusercontent.com/bkennedy2022/427Final/master/model/csv_files/pred_for_future.csv",
+        
+          // When reading the csv, I must format variables:
+          function(d){
+            return { 
+              cases: d.tot_cases_pred,
+              date : d3.timeParse("%Y-%m-%d")(d.date), value : d.value }
+          },
+        
+          // Now I can use this dataset:
+          function(data) {
+            data = data.sort(sortdates)
+            // Add X axis --> it is a date format
+            var x = d3.scaleTime()
+              .domain(d3.extent(data, function(d) { return d.date; }))
+              .range([ 0, width ]);
+            predict_svg.append("g")
+              .attr("transform", "translate(0," + height + ")")
+              .call(
+                d3.axisBottom(x)
+                  .ticks(d3.timeMonth.every(2))
+                  .tickFormat(d3.timeFormat("%m-%Y")));
+        
+            // Add Y axis
+            var y = d3.scaleLinear()
+              .domain([0, d3.max(data, function(d) {return +d.cases; })])
+              .range([ height, 0 ])
+            predict_svg.append("g")
+              .call(
+                d3.axisLeft(y)
+                  .tickFormat((val) => d3.format('.2s')(val))
+                );
+        
+            // Add the line
+            predict_svg.append("path")
+              .datum(data)
+              .attr("fill", "none")
+              .attr("stroke", "steelblue")
+              .attr("stroke-width", 1)
+              .attr("d", d3.line()
+                .x(function(d) { return x(d.date) })
+                .y(function(d) { return y(d.cases) })
+                )
+
+            // predict_svg.append("text")
+            //   .attr("transform", "rotate(-90)")
+            //   .attr("y", 0 - margin.left)
+            //   .attr("x",0 - (height / 2))
+            //   .attr("dy", "1em")
+            //   .style("text-anchor", "middle")
+            //   .text("Cases");
+
+            // predict_svg.append("text")
+            //   .attr("transform", "rotate(-90)")
+            //   .attr("y", 0 - margin.left)
+            //   .attr("x",0 - (height / 2))
+            //   .attr("dy", "1em")
+            //   .style("text-anchor", "middle")
+            //   .text("Cases");
+
+            // predict_svg.append("text")             
+            //   .attr("transform",
+            //         "translate(" + (width/2) + " ," + 
+            //                       (height + margin.top + 20) + ")")
+            //   .style("text-anchor", "middle")
+            //   .text("Date");
         
         })
         
