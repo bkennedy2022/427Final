@@ -30,32 +30,39 @@
     <!-- <div id="my_dataviz"></div> -->
 
     <script>
-
-
-      // set the dimensions and margins of the graph
-      var margin = {top: 20, right: 30, bottom: 40, left: 200},
-          width = 860 - margin.left - margin.right,
-          height = 400 - margin.top - margin.bottom
-      
-      // append the svg object to the body of the page
-      var svg = d3.select("#my_dataviz")
-        .append("svg")
-          .attr("width", width + margin.left + margin.right)
-          .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-          .attr("transform",
-                "translate(" + margin.left + "," + margin.top + ")")
       
       // fetch csv from git
       d3.csv("https://raw.githubusercontent.com/bkennedy2022/427Final/master/processed_data/cases_by_{{ choice }}.csv", function(data) {
       
+        // set the dimensions and margins of the graph
+      var margin = {
+        top: 20, right: 30, bottom: 40, left: 80},
+          width = 860 - margin.left - margin.right,
+          height = 400 - margin.top - margin.bottom
+
+      if ('{{ choice }}' == 'race')
+        margin.left = 200;
+      
+      // append the svg object to the body of the page
+      var svg = d3.select("#my_dataviz")
+        .append("svg")
+          .style("position", "relative")
+          .style("left", '50px')
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+          .style('background-color', 'white')
+        .append("g")
+          .attr("transform",
+                "translate(" + margin.left + "," + margin.top + ")")
+          .attr('fill', 'white')
+
         // determine top bound of x-axis
         var domain_bound = 0
         data.forEach(function(value, index, array) {
-          if (value.value > domain_bound)
-            domain_bound = value.value
+          if (Number(value.value) > domain_bound)
+            domain_bound = Number(value.value)
         })
-        domain_bound = Number(domain_bound) + 5000
+        domain_bound = Number(domain_bound) + 100
 
         // Add X axis
         var x = d3.scaleLinear()
@@ -73,7 +80,7 @@
         var y = d3.scaleBand()
           .range([ 0, height ])
           .domain(data.map(function(d) { return d.metric }))
-          .padding(.1)
+          .padding(1/data.length)
 
         svg.append("g")
           .call(d3.axisLeft(y))
@@ -87,26 +94,32 @@
         .style("position", "absolute")
         .style("z-index", "5")
         .style("visibility", "hidden")
-        .style("background", "#ffffff")
-        .text("a simple tooltip")
+        .style("background", "lightgray")
+        .style("padding", "5px")
+        .style("border-radius", "2px")
 
         //Bars
         svg.selectAll("body")
           .data(data)
           .enter().append("rect")
           .attr("x", x(0) )
-          .attr("y", function(d) { return y(d.metric) })
+          .attr("y", function(d) { return (y(d.metric))})
+          .attr('fill', 'brown')
           .attr("width", function(d) { return x(d.value) })
-          .attr("height", 50 )
-          .attr("fill", "brown")
+          .attr("height",  y.bandwidth() )
           .text(function(d) { return d.value; })
           .on("mouseover", function(d){
-            tooltip.text(d.metric + ": " + d.value);
+            this.setAttribute('fill-opacity','.5')
+            tooltip.html(d.metric + "<br>" + d.value + " cases")
             return tooltip.style("visibility", "visible");
           })
           .on("mousemove", function(){
-            return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");})
-          .on("mouseout", function(){return tooltip.style("visibility", "hidden")})
+            return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px")
+          })
+          .on("mouseout", function(){
+            this.setAttribute('fill-opacity','1.0')
+            return tooltip.style("visibility", "hidden")
+          })
       })
       </script>
 </body>

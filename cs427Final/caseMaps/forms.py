@@ -10,3 +10,5 @@ class DemographicForm(forms.Form):
         (0, 'Gender'),
         (0, 'Age'),
     ]
+
+    

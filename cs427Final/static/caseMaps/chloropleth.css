@@ -13,6 +13,37 @@ svg {
 	position: absolute;
 }
 
+#my-dataviz {
+    width: 600px;
+    height: 500px;
+    background-color: white;
+}
+
+/* STYLE FOR CHLORPLETH */
+path {
+    stroke:white;
+    stroke-width: 1px;
+}
+
+path:hover {
+    z-index: 51;
+    opacity: .4;
+}
+
+p {
+   font-family: 'Proxima Nova', sans-serif;
+   font-size:10px;
+   margin: 20px 0 0 10px;
+}
+
+@media (max-width: 400px) {
+    .d3map {
+        display: none;
+    }
+}
+
+
+
 /* header styling */
 #header {
     width: auto;
@@ -35,8 +66,6 @@ svg {
     color: #fff;
 }
 
-/* end of django admin styling*/
-
 #subheader {
     width: auto;
     height: 50px;
@@ -50,54 +79,4 @@ svg {
     color: lightgray;
     text-decoration: none;
     padding: 5px 10px 5px 10px;
-}
-
-
-
-
-/* STYLE FOR CHLORPLETH */
-
-path {
-    stroke:white;
-    stroke-width: 1px;
-}
-
-path:hover {
-    z-index: 10;
-    stroke:black;
-    fill: cornflowerblue;
-}
-
-/* .legend {
-    font-size: 14px;
-    font-family: 'Proxima Nova', sans-serif;
-}
-
-.legend_title {
-    font-size: 14px;
-    font-family: 'Proxima Nova', sans-serif;
-    font-weight: bold;
-} */
-
-/* div.tooltip {
-    position: absolute;
-    left: 75px;
-    text-align: center;
-    height: 16px;
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #989898;
-    pointer-events: none;
-} */
-
-p {
-   font-family: 'Proxima Nova', sans-serif;
-   font-size:10px;
-   margin: 20px 0 0 10px;
-}
-
-@media (max-width: 400px) {
-    .d3map {
-        display: none;
-    }
 }
