@@ -11,6 +11,8 @@
     <script src="https://d3js.org/queue.v1.min.js"></script>
 	<script src="https://d3js.org/topojson.v1.min.js"></script> 
     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <div id="header">
         <div id="branding">
@@ -64,6 +66,7 @@
         .attr("id", "chart")
         .attr("width", w)
         .attr("height", h)
+        .style('background-color', 'white')
         .append("g")
         .attr("tranform", "translate(0" + margin.left + "," + margin.top + ")")
 
@@ -84,14 +87,40 @@
           }
       });
 
+      var tooltip = d3.select("body")
+        .append("div")
+        .style("position", "absolute")
+        .style("z-index", "5")
+        .style("visibility", "hidden")
+        .style("background", "lightgray")
+        .style("padding", "5px")
+        .style("border-radius", "2px")
+        .text("")
+
         svg.selectAll("path")
           .data(json.features)
-          .enter()
-          .append("path")
+          .enter().append("path")
           .attr("d", path)
           .style("fill", function(d){
             return color(d.properties.value)
-          });
+          })
+          .on("mouseover", function(d){
+            //tooltip.text(d.properties.name + "\n " + d.properties.value + " cases")
+            tooltip.html(d.properties.name + "<br>" + d.properties.value + " cases");
+            return tooltip.style("visibility", "visible")
+          })
+          .on("mousemove", function(){
+            return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px")
+          })
+          .on("mouseout", function(){return tooltip.style("visibility", "hidden")})
+
+          svg.append("text")
+            .attr("x", (width / 2))             
+            .attr("y", 0 + (margin.top ))
+            .attr("text-anchor", "middle")  
+            .style("font-size", "16px") 
+            .style("text-decoration", "underline")  
+            .text("Value vs Date Graph");
 
       });
 

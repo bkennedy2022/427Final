@@ -16,6 +16,29 @@ svg text.label {
     text-anchor: right;
   }
 
+svg {
+    fill: white;
+}
+
+svg g {
+    /* width: 600px;
+    height: 500px; */
+    background-color: white;
+}
+
+  /* BAR STYLINGS  */
+rect {
+    pointer-events: all;
+
+    /* fill: brown; */
+}
+
+rect:hover {
+    filter: brightness(0%);
+    z-index: 51;
+    opacity: 0.8;
+}
+
 /* header styling */
 #header {
     width: auto;

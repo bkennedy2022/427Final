@@ -14,7 +14,7 @@ def chloropleth(request):
     return render(request,'caseMaps/chloropleth.html')
 
 def histograms(request):
-    context = {"choice": 'race'}
+    context = {"choice": 'sex'}
 
     # form was submitted, change the graph
     # if request.POST:

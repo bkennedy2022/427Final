@@ -13,66 +13,36 @@ svg {
 	position: absolute;
 }
 
-.gratBackground {
-  fill: #D5E3FF;
+#my-dataviz {
+    width: 600px;
+    height: 500px;
 }
 
-.gratLines {
-  fill: none;
-  stroke: #999;
-  stroke-width: 1px;
+/* STYLE FOR CHLORPLETH */
+path {
+    stroke:white;
+    stroke-width: 1px;
 }
 
-.map {
-	border: medium solid #999;
+path:hover {
+    filter: brightness(0%);
+    z-index: 51;
+    opacity: 0.8;
 }
 
-.countries {
-  fill: #fff;
-  stroke: #ccc;
-  stroke-width: 2px;
+p {
+   font-family: 'Proxima Nova', sans-serif;
+   font-size:10px;
+   margin: 20px 0 0 10px;
 }
 
-.regions {
-  fill: none;
-  stroke: #000;
-  stroke-width: 0.5px;
-  stroke-linecap: round;
+@media (max-width: 400px) {
+    .d3map {
+        display: none;
+    }
 }
 
-.dropdown {
-	margin-left: 980px;
-}
 
-.infolabel {
-	position: absolute;
-	width: 200px;
-	height: 50px;
-	color: #fff;
-	background-color: #000;
-	border: solid thin #fff;
-	padding: 5px;
-}
-
-.infolabel h1 {
-	margin: 0px;
-	padding: 0px;
-	display: inline-block;
-	line-height: 1em;
-}
-
-.infolabel b {
-	float: left;
-}
-
-.labelname {
-	display: inline-block;
-	float: right;
-	margin: -25px 0px 0px 40px;
-	font-size: 1em;
-	font-weight: bold;
-	position: absolute;
-}
 
 /* header styling */
 #header {
@@ -96,8 +66,6 @@ svg {
     color: #fff;
 }
 
-/* end of django admin styling*/
-
 #subheader {
     width: auto;
     height: 50px;
@@ -111,54 +79,4 @@ svg {
     color: lightgray;
     text-decoration: none;
     padding: 5px 10px 5px 10px;
-}
-
-
-
-
-/* STYLE FOR CHLORPLETH */
-
-path {
-    stroke:white;
-    stroke-width: 1px;
-}
-
-.county {
-    font: 14px sans-serif;
-    font-weight: bold;
-}
-
-.legend {
-    font-size: 14px;
-    font-family: 'Proxima Nova', sans-serif;
-}
-
-.legend_title {
-    font-size: 14px;
-    font-family: 'Proxima Nova', sans-serif;
-    font-weight: bold;
-}
-
-div.tooltip {
-    position: absolute;
-    left: 75px;
-    text-align: center;
-    height: 16px;
-    padding: 10px;
-    font-size: 14px;
-    background: #FFFFFF;
-    border: 1px solid #989898;
-    pointer-events: none;
-}
-
-p {
-   font-family: 'Proxima Nova', sans-serif;
-   font-size:10px;
-   margin: 20px 0 0 10px;
-}
-
-@media (max-width: 400px) {
-.d3map {
-   display: none;
-}
 }
