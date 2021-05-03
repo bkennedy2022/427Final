@@ -25,60 +25,178 @@
         </h4>
     </div>
 
-    <div id="my_dataviz"></div>
+    <div id="actual"></div>
+    <div id="prediction"></div>
 
     <script>
 
+        //https://stackoverflow.com/questions/26067081/date-sorting-with-d3-js/26067556
+        function sortdates(d1, d2) {
+            return d1.date - d2.date;
+        }
+
         // set the dimensions and margins of the graph
         var margin = {top: 10, right: 30, bottom: 30, left: 60},
-            width = 460 - margin.left - margin.right,
-            height = 400 - margin.top - margin.bottom;
+            width = 550 - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom;
         
         // append the svg object to the body of the page
-        var svg = d3.select("#my_dataviz")
+        var svg = d3.select("#actual")
           .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
           .append("g")
             .attr("transform",
                   "translate(" + margin.left + "," + margin.top + ")");
+
+        // append the svg object to the body of the page
+        var predict_svg = d3.select("#prediction")
+          .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+            .attr("transform",
+                  "translate(" + margin.left + "," + margin.bottom + ")");
+        
         
         //Read the data
         d3.csv("https://raw.githubusercontent.com/bkennedy2022/427Final/master/model/csv_files/actual_data.csv",
         
           // When reading the csv, I must format variables:
           function(d){
-            return { date : d3.timeParse("%Y/%m/%d")(d.submission_date), value : d.tot_cases }
+            return { 
+              cases: d.tot_cases,
+              date : d3.timeParse("%m/%d/%Y")(d.submission_date), value : d.value }
           },
         
           // Now I can use this dataset:
           function(data) {
         
+            data = data.sort(sortdates)
             // Add X axis --> it is a date format
             var x = d3.scaleTime()
               .domain(d3.extent(data, function(d) { return d.submission_date; }))
               .range([ 0, width ]);
             svg.append("g")
               .attr("transform", "translate(0," + height + ")")
-              .call(d3.axisBottom(x));
+              .call(
+                d3.axisBottom(x)
+                  .ticks(d3.timeMonth.every(2))
+                  .tickFormat(d3.timeFormat("%m-%Y")));
         
             // Add Y axis
             var y = d3.scaleLinear()
-              .domain([0, d3.max(data, function(d) { return +d.tot_cases; })])
-              .range([ height, 0 ]);
+              .domain([0, d3.max(data, function(d) {return +d.cases; })])
+              .range([ height, 0 ])
             svg.append("g")
-              .call(d3.axisLeft(y));
+              .call(
+                d3.axisLeft(y)
+                  .tickFormat((val) => d3.format('.2s')(val))
+                );
         
             // Add the line
             svg.append("path")
               .datum(data)
               .attr("fill", "none")
               .attr("stroke", "steelblue")
-              .attr("stroke-width", 1.5)
+              .attr("stroke-width", 1)
               .attr("d", d3.line()
-                .x(function(d) { return x(d.submission_date) })
-                .y(function(d) { return y(d.tot_cases) })
+                .x(function(d) { return x(d.date) })
+                .y(function(d) { return y(d.cases) })
                 )
+
+            svg.append("text")
+              .attr("transform", "rotate(-90)")
+              .attr("y", 0 - margin.left)
+              .attr("x",0 - (height / 2))
+              .attr("dy", "1em")
+              .style("text-anchor", "middle")
+              .text("Cases");
+
+            svg.append("text")
+              .attr("transform", "rotate(-90)")
+              .attr("y", 0 - margin.left)
+              .attr("x",0 - (height / 2))
+              .attr("dy", "1em")
+              .style("text-anchor", "middle")
+              .text("Cases");
+
+            svg.append("text")             
+              .attr("transform",
+                    "translate(" + (width/2) + " ," + 
+                                  (height + margin.top + 20) + ")")
+              .style("text-anchor", "middle")
+              .text("Date");
+        
+        })
+
+        //Read the data
+        d3.csv("https://raw.githubusercontent.com/bkennedy2022/427Final/master/model/csv_files/pred_for_future.csv",
+        
+          // When reading the csv, I must format variables:
+          function(d){
+            return { 
+              cases: d.tot_cases_pred,
+              date : d3.timeParse("%Y-%m-%d")(d.date), value : d.value }
+          },
+        
+          // Now I can use this dataset:
+          function(data) {
+            data = data.sort(sortdates)
+            // Add X axis --> it is a date format
+            var x = d3.scaleTime()
+              .domain(d3.extent(data, function(d) { return d.date; }))
+              .range([ 0, width ]);
+            predict_svg.append("g")
+              .attr("transform", "translate(0," + height + ")")
+              .call(
+                d3.axisBottom(x)
+                  .ticks(d3.timeMonth.every(2))
+                  .tickFormat(d3.timeFormat("%m-%Y")));
+        
+            // Add Y axis
+            var y = d3.scaleLinear()
+              .domain([0, d3.max(data, function(d) {return +d.cases; })])
+              .range([ height, 0 ])
+            predict_svg.append("g")
+              .call(
+                d3.axisLeft(y)
+                  .tickFormat((val) => d3.format('.2s')(val))
+                );
+        
+            // Add the line
+            predict_svg.append("path")
+              .datum(data)
+              .attr("fill", "none")
+              .attr("stroke", "steelblue")
+              .attr("stroke-width", 1)
+              .attr("d", d3.line()
+                .x(function(d) { return x(d.date) })
+                .y(function(d) { return y(d.cases) })
+                )
+
+            // predict_svg.append("text")
+            //   .attr("transform", "rotate(-90)")
+            //   .attr("y", 0 - margin.left)
+            //   .attr("x",0 - (height / 2))
+            //   .attr("dy", "1em")
+            //   .style("text-anchor", "middle")
+            //   .text("Cases");
+
+            // predict_svg.append("text")
+            //   .attr("transform", "rotate(-90)")
+            //   .attr("y", 0 - margin.left)
+            //   .attr("x",0 - (height / 2))
+            //   .attr("dy", "1em")
+            //   .style("text-anchor", "middle")
+            //   .text("Cases");
+
+            // predict_svg.append("text")             
+            //   .attr("transform",
+            //         "translate(" + (width/2) + " ," + 
+            //                       (height + margin.top + 20) + ")")
+            //   .style("text-anchor", "middle")
+            //   .text("Date");
         
         })
         
