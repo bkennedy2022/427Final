@@ -24,8 +24,8 @@
     <div id="subheader">
         <h4 id="subheader h4">
             <a href="{% url 'home' %}" class="header-tabs"> Home </a>
-            <a href="{% url 'histograms' %}" class="header-tabs"> Histograms </a>
-            <a href="{% url 'regression' %}" class="header-tabs"> Regression </a>
+            <a href="{% url 'histograms' %}" class="header-tabs"> Demographic Info </a>
+            <a href="{% url 'regression' %}" class="header-tabs"> Covid Case Regression Model </a>
         </h4>
     </div>
     <!-- Chloropleth "home" page -->
@@ -154,14 +154,7 @@
         <br>
     </div>
 
-      <!-- Bar graph page -->
-    <div>
-        <h3>Cases by Demographic</h3> 
-        <p>
-            Displayed below are bar graphs showing demographic information about the patients reported to testing positive. 
-            Included demographic information consists of age, sex, ethnicity and race.
-        </p>
-    </div>
+
     <!-- Regression model page -->
     <div>
         <h3>Predicting Future Cases</h3> 
