@@ -10,8 +10,8 @@ import pandas as pd
 def home(request):
     return render(request,'caseMaps/home.html')
 
-def chloropleth(request):
-    return render(request,'caseMaps/chloropleth.html')
+# def chloropleth(request):
+#     return render(request,'caseMaps/chloropleth.html')
 
 def histograms(request):
     context = {"choice": 'sex'}

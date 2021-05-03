@@ -6,7 +6,7 @@ body {
     margin: 0;
     padding: 0;
     font-size: 14px;
-    background-color: black;
+    background-color: antiquewhite;
 }
 
 svg {
@@ -16,7 +16,6 @@ svg {
 #my-dataviz {
     width: 600px;
     height: 500px;
-    background-color: white;
 }
 
 /* STYLE FOR CHLORPLETH */
@@ -26,8 +25,9 @@ path {
 }
 
 path:hover {
+    filter: brightness(0%);
     z-index: 51;
-    opacity: .4;
+    opacity: 0.8;
 }
 
 p {

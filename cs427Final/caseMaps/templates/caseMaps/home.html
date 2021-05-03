@@ -3,14 +3,16 @@
     <meta charset="utf-8">
     <title>Home</title>
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'caseMaps/home.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'caseMaps/chloropleth.css' %}">
 </head>
 <body>
     <!-- Load d3.js -->
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://d3js.org/queue.v1.min.js"></script>
-	<script src="https://d3js.org/topojson.v1.min.js"></script> 
+	  <script src="https://d3js.org/topojson.v1.min.js"></script> 
     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <div id="header">
         <div id="branding">
@@ -22,7 +24,6 @@
     <div id="subheader">
         <h4 id="subheader h4">
             <a href="{% url 'home' %}" class="header-tabs"> Home </a>
-            <a href="{% url 'chloropleth' %}" class="header-tabs"> Chloropleth </a>
             <a href="{% url 'histograms' %}" class="header-tabs"> Histograms </a>
             <a href="{% url 'regression' %}" class="header-tabs"> Regression </a>
         </h4>
@@ -45,9 +46,115 @@
         <p>
             The following chloropleth map presents the total number of reported cases per state from 
             January 2020 to April 2021. 
-        </p>
+        </p><br>
+        <div>
+            <script>
+
+                // based on tutorial https://bl.ocks.org/JulienAssouline/1ae3480c5277e2eecd34b71515783d6f
+                
+                //Width and height
+                let w = 800
+                let h = 500
+          
+                var margin = {
+                  top: 30, right: 40, bottom: 100, left: 70,
+                },
+                width = w - (margin.left + margin.right),
+                height = h - (margin.top + margin.bottom);
+          
+                var domain = [] //[100, 10000, 20000, 30000, 50000, 100000, 2000000, 4000000, 8000000, 1000000, 5000000]
+                
+                for(var i = 0; i < 3700000; i += 1000)
+                  domain.push(i)
+          
+                // define map projection
+                var projection = d3.geoAlbersUsa()
+                  .translate([w/2, h/2])
+                  .scale([800])
+          
+                //Define default path generator
+                var path = d3.geoPath()
+                  .projection(projection)
+          
+                var svg = d3.select("body")
+                  .append("svg")
+                  .attr("id", "chart")
+                  .style("position", "relative")
+                  .attr("width", w)
+                  .attr("height", h)
+                  .style("background-color", "#1a1a1a")
+                  .append("g")
+                  .attr("tranform", "translate(0" + margin.left + "," + margin.top + ")")
+          
+                  var color = d3.scaleQuantile()
+                   .domain(domain)
+                   .range(d3.schemeReds[7]);
+          
+                d3.csv("https://raw.githubusercontent.com/bkennedy2022/427Final/master/processed_data/cases_by_state.csv", function(data){
+          
+                d3.json("https://raw.githubusercontent.com/python-visualization/folium/master/examples/data/us-states.json", function(json){
+                  
+                  data.forEach(function(value, index, array) {
+                    for(var i = 0; i < json.features.length; i++){
+                        if(value.state == json.features[i].properties.name){
+                          json.features[i].properties.value = value.value
+                          break
+                        }
+                      }
+                  })
+          
+                  var tooltip = d3.select("body")
+                    .append("div")
+                    .style("position", "absolute")
+                    .style("z-index", "5")
+                    .style("visibility", "hidden")
+                    .style("background", "cornflowerblue")
+                    .style("padding", "5px")
+                    .style("border-radius", "2px")
+          
+                    svg.selectAll("path")
+                      .data(json.features)
+                      .enter().append("path")
+                      .attr("d", path)
+                      .style("fill", function(d){
+                        return color(d.properties.value)
+                      })
+                      .on("mouseover", function(d){
+                        // format cases with commas
+                        var cases = Number(d.properties.value)
+                        cases = cases.toLocaleString("en-US")
+
+                        // set tooltip text
+                        tooltip.html(d.properties.name + "<br>" + cases + " cases")
+                        return tooltip.style("visibility", "visible")
+                      })
+                      .on("mousemove", function(){
+                        // move around tooltip
+                        return tooltip.style("top", (d3.event.pageY+10)+"px").style("left",(d3.event.pageX+10)+"px")
+                      })
+                      .on("mouseout", function(){
+                        // remove tooltip
+                        return tooltip.style("visibility", "hidden")
+                      })
+          
+                      svg.append("text")
+                        .attr("x", (width / 2))             
+                        .attr("y", 0 + margin.top)
+                        .attr("fill", "white")
+                        .attr("text-anchor", "middle")  
+                        .style("font-size", "21px") 
+                        .style("text-decoration", "underline")  
+                        .text("Total # Cases in US By State")
+          
+                  })
+          
+                })
+              </script>
+        </div>
+        <br>
     </div>
-    <!-- Bar graph page -->
+
+      <!-- Bar graph page -->
     <div>
         <h3>Cases by Demographic</h3> 
         <p>

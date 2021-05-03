@@ -20,7 +20,6 @@
     <div id="subheader">
       <h4 id="subheader h4">
         <a href="{% url 'home' %}" class="header-tabs"> Home </a>
-        <a href="{% url 'chloropleth' %}" class="header-tabs"> Chloropleth </a>
         <a href="{% url 'histograms' %}" class="header-tabs"> Histograms </a>
         <a href="{% url 'regression' %}" class="header-tabs"> Regression </a>
     </h4>
@@ -31,14 +30,16 @@
 
     <script>
       
+      // tutorial based on https://www.d3-graph-gallery.com/graph/barplot_horizontal.html
+      
       // fetch csv from git
       d3.csv("https://raw.githubusercontent.com/bkennedy2022/427Final/master/processed_data/cases_by_{{ choice }}.csv", function(data) {
       
         // set the dimensions and margins of the graph
       var margin = {
         top: 40, right: 30, bottom: 40, left: 80},
-          width = 860 - margin.left - margin.right,
-          height = 400 - margin.top - margin.bottom
+            width = 860 - (margin.left + margin.right),
+            height = 400 - (margin.top + margin.bottom);
 
       if ('{{ choice }}' == 'race')
         margin.left = 200;
@@ -51,7 +52,7 @@
           .style("top", '50px')
           .attr("width", width + margin.left + margin.right)
           .attr("height", height + margin.top + margin.bottom)
-          .style('background-color', 'white')
+          .style("background-color", "white")
         .append("g")
           .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")")
@@ -91,13 +92,13 @@
         // if y.bandwidth() > 50:argument
 
         var tooltip = d3.select("body")
-        .append("div")
-        .style("position", "absolute")
-        .style("z-index", "5")
-        .style("visibility", "hidden")
-        .style("background", "lightgray")
-        .style("padding", "5px")
-        .style("border-radius", "2px")
+          .append("div")
+          .style("position", "absolute")
+          .style("z-index", "5")
+          .style("visibility", "hidden")
+          .style("background", "lightgray")
+          .style("padding", "5px")
+          .style("border-radius", "2px")
 
         //Bars
         svg.selectAll("body")
@@ -105,30 +106,29 @@
           .enter().append("rect")
           .attr("x", x(0) )
           .attr("y", function(d) { return (y(d.metric))})
-          .attr('fill', 'brown')
+          .attr("fill", "brown")
           .attr("width", function(d) { return x(d.value) })
           .attr("height",  y.bandwidth() )
           .text(function(d) { return d.value; })
           .on("mouseover", function(d){
-            this.setAttribute('fill-opacity','.5')
+            this.setAttribute("fill-opacity",".5")
             tooltip.html(d.metric + "<br>" + d.value + " cases")
             return tooltip.style("visibility", "visible");
           })
           .on("mousemove", function(){
-            return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px")
+            return tooltip.style("top", (d3.event.pageY+10)+"px").style("left",(d3.event.pageX+10)+"px")
           })
           .on("mouseout", function(){
-            this.setAttribute('fill-opacity','1.0')
+            this.setAttribute("fill-opacity","1.0")
             return tooltip.style("visibility", "hidden")
           })
 
           svg.append("text")
             .attr("x", (width / 2))             
             .attr("y", 0)
-            .attr('fill', 'black')
+            .attr("fill", "black")
             .attr("text-anchor", "middle")  
             .style("font-size", "21px") 
-            // .style("z-index", "5")
             .style("text-decoration", "underline")  
             .text("Total # Cases in US By {{ choice }}")
       })
