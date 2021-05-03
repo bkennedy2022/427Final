@@ -9,6 +9,12 @@ body {
     background: antiquewhite;
 }
 
+form {
+    position: relative;
+    top: -200px;
+    left: 1100px;
+}
+
 svg text.label {
     fill:white;
     font: 15px;  

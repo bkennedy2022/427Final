@@ -9,6 +9,22 @@ body {
     background: antiquewhite;
 }
 
+
+/* FLOAT GRAPHS NEXT TO EACH OTHER */
+div {
+    width: 450px;
+    float: left; 
+}
+#actual {
+    width: 450px;
+    float: left;
+}
+
+#prediction {
+    width: 450px;
+    float: left;
+}
+
 /* header styling */
 #header {
     width: auto;

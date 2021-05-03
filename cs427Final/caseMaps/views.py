@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 import boto3
 import pandas as pd
@@ -20,6 +20,17 @@ def histograms(request):
     # if request.POST:
 
     return render(request,'caseMaps/histograms.html', context)
+
+def ajax_histograms(request, demographic):
+    context = {"choice": demographic}
+
+    print(request)
+    print(demographic)
+
+    # form was submitted, change the graph
+    # if request.POST:
+
+    return JsonResponse(context)
 
 def regression(request):
     return render(request,'caseMaps/regression.html')

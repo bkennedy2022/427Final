@@ -45,18 +45,26 @@
         var svg = d3.select("#actual")
           .append("svg")
             .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
+            .attr("height", height + margin.top + margin.bottom+ 30)
             .style("background-color", "white")
+            .style("position", "relative")
+            .style("left", "10px")
+            .style("top", "10px")
           .append("g")
             .attr("transform",
                   "translate(" + margin.left + "," + margin.top + ")");
 
         // append the prediction svg object to the body of the page
+        let predict_left = width + margin.left + margin.right + 30;
+        let predict_top = -1*(height+ margin.top + margin.bottom + 22);
         var predict_svg = d3.select("#prediction")
           .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom + 30)
             .style("background-color", "white")
+            .style("position", "relative")
+            .style("left", predict_left + "px")
+            .style("top", predict_top + "px")
           .append("g")
             .attr("transform",
                   "translate(" + margin.left + "," + margin.bottom + ")");

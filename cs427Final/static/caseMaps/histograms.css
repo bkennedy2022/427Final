@@ -9,6 +9,12 @@ body {
     background: antiquewhite;
 }
 
+form {
+    position: relative;
+    top: -200px;
+    left: 1100px;
+}
+
 svg text.label {
     fill:white;
     font: 15px;  
@@ -16,9 +22,13 @@ svg text.label {
     text-anchor: right;
   }
 
-  #my-dataviz {
-    width: 600px;
-    height: 500px;
+svg {
+    fill: white;
+}
+
+svg g {
+    /* width: 600px;
+    height: 500px; */
     background-color: white;
 }
 
@@ -30,9 +40,9 @@ rect {
 }
 
 rect:hover {
-    /* fill: grey; */
-    filter: grayscale(90%);
-    fill-opacity: 0.4;
+    filter: brightness(0%);
+    z-index: 51;
+    opacity: 0.8;
 }
 
 /* header styling */
